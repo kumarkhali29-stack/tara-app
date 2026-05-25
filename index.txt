@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TARA - Tourist Access Registration Application</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
     <style>
         :root {
             --bg-main: #f4f7fa;
@@ -21,8 +18,6 @@
             --primary-hover: #3730a3;
             --success: #10b981;
             --success-hover: #059669;
-            --action: #f59e0b;
-            --action-hover: #d97706;
             --border: #e2e8f0;
             --border-focus: #6366f1;
             --radius-md: 8px;
@@ -31,11 +26,8 @@
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             --required-color: #ef4444;
-            
-            /* 1940s Military Typography Accent */
             --font-military: 'Courier New', Courier, monospace;
         }
-
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-main);
@@ -45,7 +37,6 @@
             line-height: 1.5;
             box-sizing: border-box;
         }
-
         .container {
             max-width: 1350px;
             margin: 0 auto;
@@ -55,15 +46,12 @@
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
         }
-
-        /* WARTIME TYPOGRAPHY HEADER */
         .header-document-section {
             text-align: center;
             margin-bottom: 25px;
             border-bottom: 2px solid var(--primary);
             padding-bottom: 20px;
         }
-
         .header-document-section .classification-mark {
             display: inline-block;
             font-family: var(--font-military);
@@ -77,7 +65,6 @@
             background: #fff;
             color: #000;
         }
-
         .header-document-section h2 {
             font-family: var(--font-military);
             font-size: 22px;
@@ -86,7 +73,6 @@
             margin: 0 0 8px 0;
             letter-spacing: 0.5px;
         }
-
         .header-document-section p {
             font-family: var(--font-military);
             color: var(--text-secondary);
@@ -96,14 +82,11 @@
             font-weight: bold;
             letter-spacing: 0.5px;
         }
-
-        /* CLEAN DATA ENTRY FORMS & GRID */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
-
         @media (max-width: 900px) {
             .form-grid { grid-template-columns: 1fr 1fr; }
             .form-group.span-2 { grid-column: span 2; }
@@ -114,26 +97,21 @@
             body { padding: 8px; }
             .container { padding: 15px; }
         }
-
         .form-group {
             display: flex;
             flex-direction: column;
         }
-
         .form-group.span-2 {
             grid-column: span 2;
         }
-
         .form-group.full-width {
             grid-column: 1 / -1;
         }
-
         .demographic-wrapper {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
-
         label {
             font-size: 12px;
             font-weight: 700;
@@ -144,7 +122,6 @@
             display: flex;
             align-items: center;
         }
-
         label .optional {
             color: var(--text-secondary);
             font-size: 11px;
@@ -152,13 +129,11 @@
             text-transform: none;
             margin-left: 4px;
         }
-
         label .required-star {
             color: var(--required-color);
             margin-left: 4px;
             font-size: 14px;
         }
-
         input, select, textarea {
             font-family: inherit;
             padding: 12px 14px;
@@ -172,48 +147,19 @@
             transition: all 0.2s ease;
             box-shadow: var(--shadow-sm);
         }
-
-        input:hover, select:hover, textarea:hover {
-            border-color: #cbd5e1;
-        }
-
+        input:hover, select:hover, textarea:hover { border-color: #cbd5e1; }
         input:focus, select:focus, textarea:focus {
             border-color: var(--border-focus);
             outline: none;
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
         }
-
-        input:required, select:required {
-            border-left: 4px solid var(--required-color);
-        }
-
-        input[type="file"] {
-            padding: 8px;
-            background: #f8fafc;
-            cursor: pointer;
-        }
-
+        input:required, select:required { border-left: 4px solid var(--required-color); }
+        input[type="file"] { padding: 8px; background: #f8fafc; cursor: pointer; }
         input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* BUTTONS */
-        .btn-container {
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        @media (min-width: 600px) {
-            .btn-container { flex-direction: row; }
-        }
-
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        .btn-container { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
+        @media (min-width: 600px) { .btn-container { flex-direction: row; } }
         button {
             font-family: inherit;
             padding: 14px 24px;
@@ -230,132 +176,30 @@
             box-shadow: var(--shadow-md);
             min-height: 48px;
         }
-
-        .btn-form {
-            flex: 1;
-            width: 100%;
-        }
-
-        .btn-add { 
-            background-color: var(--success); 
-            color: white; 
-        }
-        .btn-add:hover { 
-            background-color: var(--success-hover); 
-            transform: translateY(-1px);
-        }
-
-        .btn-export { 
-            background-color: var(--primary); 
-            color: white; 
-        }
-        .btn-export:hover { 
-            background-color: var(--primary-hover); 
-            transform: translateY(-1px);
-        }
-        
+        .btn-form { flex: 1; width: 100%; }
+        .btn-add { background-color: var(--success); color: white; }
+        .btn-add:hover { background-color: var(--success-hover); transform: translateY(-1px); }
+        .btn-export { background-color: var(--primary); color: white; }
+        .btn-export:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
         .btn-exit-trigger {
-            background-color: #fee2e2;
-            border: 1px solid #fca5a5;
-            color: #b91c1c;
-            padding: 8px 14px;
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            white-space: nowrap;
-            margin-top: 5px;
-            width: 100%;
+            background-color: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c;
+            padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: var(--radius-md);
+            cursor: pointer; transition: all 0.15s ease; white-space: nowrap; margin-top: 5px; width: 100%;
         }
-        .btn-exit-trigger:hover {
-            background-color: #b91c1c;
-            color: white;
-        }
-
+        .btn-exit-trigger:hover { background-color: #b91c1c; color: white; }
         .search-container {
-            margin-top: 35px;
-            background: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
-            padding: 20px;
-            border-radius: var(--radius-lg);
-            border: 1px solid #c7d2fe;
+            margin-top: 35px; background: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
+            padding: 20px; border-radius: var(--radius-lg); border: 1px solid #c7d2fe;
         }
-
-        .search-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-input {
-            padding: 14px 14px 14px 44px;
-            border: 1px solid #cbd5e1;
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            background-color: #fff;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            fill: #64748b;
-            pointer-events: none;
-            width: 18px;
-            height: 18px;
-        }
-
-        /* LIVE ANALYTICS TICKER */
-        .stats-ticker-container {
-            margin-top: 35px;
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .ticker-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px dashed var(--border);
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-        }
-
-        .ticker-title {
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            letter-spacing: 0.5px;
-        }
-
-        .ticker-date-badge {
-            font-size: 12px;
-            font-weight: 700;
-            background-color: #f1f5f9;
-            color: var(--primary);
-            padding: 4px 14px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
-        }
-
-        .ticker-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .ticker-subgrid-demographics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-        }
-
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+        .search-input { padding: 14px 14px 14px 44px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 15px; background-color: #fff; width: 100%; }
+        .search-icon { position: absolute; left: 16px; fill: #64748b; pointer-events: none; width: 18px; height: 18px; }
+        .stats-ticker-container { margin-top: 35px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-md); }
+        .ticker-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); padding-bottom: 12px; margin-bottom: 20px; }
+        .ticker-title { font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.5px; }
+        .ticker-date-badge { font-size: 12px; font-weight: 700; background-color: #f1f5f9; color: var(--primary); padding: 4px 14px; border-radius: 30px; border: 1px solid var(--border); }
+        .ticker-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 12px; }
+        .ticker-subgrid-demographics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid var(--border); padding-top: 15px; }
         @media (max-width: 900px) {
             .ticker-grid { grid-template-columns: repeat(3, 1fr); }
             .ticker-subgrid-demographics { grid-template-columns: repeat(3, 1fr); }
@@ -364,161 +208,33 @@
             .ticker-grid { grid-template-columns: repeat(2, 1fr); }
             .ticker-subgrid-demographics { grid-template-columns: 1fr; }
         }
-
-        .ticker-card {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .ticker-card .value {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .ticker-card .label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.2px;
-        }
-        
-        .table-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 35px;
-            margin-bottom: 12px;
-        }
-
-        .table-header-flex h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .counter-badge {
-            background: #3b82f6;
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-md);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            text-align: left;
-            min-width: 1100px;
-        }
-
-        th { 
-            background-color: #f1f5f9; 
-            color: var(--text-primary); 
-            font-weight: 700;
-            padding: 12px 14px;
-            border-bottom: 2px solid var(--border);
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-primary);
-            background-color: #fff;
-            vertical-align: top;
-        }
-
+        .ticker-card { background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; text-align: center; box-shadow: var(--shadow-sm); }
+        .ticker-card .value { font-size: 22px; font-weight: 800; color: var(--text-primary); display: block; margin-bottom: 2px; }
+        .ticker-card .label { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.2px; }
+        .table-header-flex { display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 12px; }
+        .table-header-flex h3 { margin: 0; font-size: 16px; font-weight: 800; }
+        .counter-badge { background: #3b82f6; color: #fff; padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: 700; }
+        .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 1100px; }
+        th { background-color: #f1f5f9; color: var(--text-primary); font-weight: 700; padding: 12px 14px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text-primary); background-color: #fff; vertical-align: top; }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background-color: #f8fafc; }
-
-        .img-preview {
-            width: 55px;
-            height: 55px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-            border: 1px solid var(--border);
-        }
-
-        .no-img-placeholder {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .time-badge {
-            background-color: #e0f2fe;
-            color: #0369a1;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 11px;
-            display: inline-block;
-            white-space: nowrap;
-        }
-
-        .exit-badge {
-            background-color: #fef3c7;
-            color: #b45309;
-        }
-
-        .demo-pill {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 6px;
-            margin-right: 4px;
-            margin-bottom: 4px;
-            background: #f1f5f9;
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        .footer-watermark {
-            text-align: center;
-            font-family: var(--font-military);
-            font-size: 12px;
-            font-weight: bold;
-            color: #94a3b8;
-            margin-top: 50px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--border);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            user-select: none;
-        }
+        .img-preview { width: 55px; height: 55px; border-radius: var(--radius-md); object-fit: cover; border: 1px solid var(--border); }
+        .no-img-placeholder { font-size: 11px; color: var(--text-secondary); font-style: italic; }
+        .time-badge { background-color: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; display: inline-block; white-space: nowrap; }
+        .exit-badge { background-color: #fef3c7; color: #b45309; }
+        .demo-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 6px; margin-right: 4px; margin-bottom: 4px; background: #f1f5f9; color: var(--text-primary); border: 1px solid var(--border); white-space: nowrap; }
+        .footer-watermark { text-align: center; font-family: var(--font-military); font-size: 12px; font-weight: bold; color: #94a3b8; margin-top: 50px; padding-top: 15px; border-top: 1px dashed var(--border); letter-spacing: 0.5px; text-transform: uppercase; user-select: none; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="header-document-section">
         <div class="classification-mark">RESTRICTED SECURITY LOG</div>
         <h2>TARA : Tourist Access Registration Application</h2>
         <p>Gongkar La Tourist Database Management System by 2/9 GR, Chuna</p>
     </div>
-    
     <form id="entryForm" onsubmit="event.preventDefault(); processAndAddEntry();">
         <div class="form-grid">
             <div class="form-group">
@@ -544,7 +260,6 @@
                 <label for="idNumber">ID Document Number <span class="required-star">*</span></label>
                 <input type="text" id="idNumber" placeholder="Enter document identification code/number" required>
             </div>
-
             <div class="form-group">
                 <label for="vehicleType">Type of Vehicle <span class="optional">(Optional)</span></label>
                 <select id="vehicleType">
@@ -555,12 +270,10 @@
                     <option value="Others">Others</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label for="vehicleNo">Vehicle Number <span class="optional">(Optional)</span></label>
                 <input type="text" id="vehicleNo" placeholder="e.g. DL 1CA 1234" style="text-transform: uppercase;">
             </div>
-
             <div class="form-group">
                 <label>Passenger Demographic Split <span class="optional">(Optional)</span></label>
                 <div class="demographic-wrapper">
@@ -569,7 +282,6 @@
                     <input type="number" id="passChildren" min="0" placeholder="Kids">
                 </div>
             </div>
-
             <div class="form-group full-width">
                 <label for="address">Full Address <span class="optional">(Optional)</span></label>
                 <input type="text" id="address" placeholder="House/Office details, Street, Area">
@@ -620,7 +332,6 @@
                     <option value="West Bengal">West Bengal</option>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label for="driverName">Driver Name <span class="optional">(Optional)</span></label>
                 <input type="text" id="driverName" placeholder="Driver Full Name">
@@ -633,25 +344,18 @@
                 <label for="emergencyContact">Emergency Contact <span class="required-star">*</span></label>
                 <input type="text" id="emergencyContact" placeholder="Emergency Phone Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
             </div>
-            
             <div class="form-group full-width">
                 <label for="remarks">Remarks / Purpose of Visit <span class="optional">(Optional)</span></label>
                 <input type="text" id="remarks" placeholder="Enter any specific remarks or meeting purpose here...">
             </div>
-
             <div class="form-group full-width">
                 <label for="photo">Snapshot/Identification Photo <span class="optional">(Optional)</span></label>
                 <input type="file" id="photo" accept="image/*">
             </div>
         </div>
-        
         <div class="btn-container">
-            <button type="submit" class="btn-form btn-add">
-                Secure Check-In / Add Entry
-            </button>
-            <button type="button" class="btn-form btn-export" onclick="exportToExcel()">
-                Export Master Sheet (.xlsx)
-            </button>
+            <button type="submit" class="btn-form btn-add">Secure Check-In / Add Entry</button>
+            <button type="button" class="btn-form btn-export" onclick="exportToExcel()">Export Master Sheet (.xlsx)</button>
         </div>
     </form>
 
@@ -661,45 +365,17 @@
             <span class="ticker-date-badge" id="tickerLiveDate">DD/MM/YYYY</span>
         </div>
         <div class="ticker-grid">
-            <div class="ticker-card" style="border-top: 3px solid #6366f1;">
-                <span class="value" id="statVehicles">0</span>
-                <span class="label">Total Vehicles</span>
-            </div>
-            <div class="ticker-card" style="border-top: 3px solid #10b981;">
-                <span class="value" id="statPassengers">0</span>
-                <span class="label">Total Passengers</span>
-            </div>
-            <div class="ticker-card">
-                <span class="value" id="statCars">0</span>
-                <span class="label">Cars</span>
-            </div>
-            <div class="ticker-card">
-                <span class="value" id="statBikes">0</span>
-                <span class="label">Bikes</span>
-            </div>
-            <div class="ticker-card">
-                <span class="value" id="statScooties">0</span>
-                <span class="label">Scooties</span>
-            </div>
-            <div class="ticker-card">
-                <span class="value" id="statOthers">0</span>
-                <span class="label">Others</span>
-            </div>
+            <div class="ticker-card" style="border-top: 3px solid #6366f1;"><span class="value" id="statVehicles">0</span><span class="label">Total Vehicles</span></div>
+            <div class="ticker-card" style="border-top: 3px solid #10b981;"><span class="value" id="statPassengers">0</span><span class="label">Total Passengers</span></div>
+            <div class="ticker-card"><span class="value" id="statCars">0</span><span class="label">Cars</span></div>
+            <div class="ticker-card"><span class="value" id="statBikes">0</span><span class="label">Bikes</span></div>
+            <div class="ticker-card"><span class="value" id="statScooties">0</span><span class="label">Scooties</span></div>
+            <div class="ticker-card"><span class="value" id="statOthers">0</span><span class="label">Others</span></div>
         </div>
-        
         <div class="ticker-subgrid-demographics">
-            <div class="ticker-card" style="border-top: 3px solid #3b82f6;">
-                <span class="value" id="statMales">0</span>
-                <span class="label">Total Men (Males)</span>
-            </div>
-            <div class="ticker-card" style="border-top: 3px solid #ec4899;">
-                <span class="value" id="statFemales">0</span>
-                <span class="label">Total Women (Females)</span>
-            </div>
-            <div class="ticker-card" style="border-top: 3px solid #f59e0b;">
-                <span class="value" id="statChildren">0</span>
-                <span class="label">Total Children</span>
-            </div>
+            <div class="ticker-card" style="border-top: 3px solid #3b82f6;"><span class="value" id="statMales">0</span><span class="label">Total Men</span></div>
+            <div class="ticker-card" style="border-top: 3px solid #ec4899;"><span class="value" id="statFemales">0</span><span class="label">Total Women</span></div>
+            <div class="ticker-card" style="border-top: 3px solid #f59e0b;"><span class="value" id="statChildren">0</span><span class="label">Total Children</span></div>
         </div>
     </div>
 
@@ -736,19 +412,137 @@
                     <th>Snapshot</th>
                 </tr>
             </thead>
-            <tbody>
-                </tbody>
+            <tbody></tbody>
         </table>
     </div>
-
-    <div class="footer-watermark">
-        Application Architecture via Vikas Kumar & Gemini
-    </div>
+    <div class="footer-watermark">Application Architecture via Vikas Kumar & Gemini</div>
 </div>
 
 <script>
     let entriesData = [];
+    window.onload = function() { updateTickerDate(); };
 
-    window.onload = function() {
-        if (typeof XLSX === 'undefined') {
-            alert("Configuration Notice: Excel Engine framework offline. Connect to
+    function updateTickerDate() {
+        const today = new Date();
+        document.getElementById('tickerLiveDate').innerText = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    }
+
+    function getTodayDateString() {
+        const today = new Date();
+        return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    }
+
+    function formatTo12Hour(dateObj) {
+        let hours = dateObj.getHours();
+        let minutes = dateObj.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
+    }
+
+    function resizeAndCompressImage(file, callback) {
+        if (!file) { callback(""); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let w = img.width, h = img.height;
+                if (w > h) { if (w > 120) { h *= 120 / w; w = 120; } } 
+                else { if (h > 120) { w *= 120 / h; h = 120; } }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                callback(canvas.toDataURL('image/jpeg', 0.6));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function recalculateLiveTickerStats() {
+        let tv = 0, tp = 0, tm = 0, tf = 0, tc = 0, cars = 0, bikes = 0, scooties = 0, others = 0;
+        entriesData.forEach(item => {
+            tp += item.totalPassengers; tm += item.males; tf += item.females; tc += item.children;
+            if(item.vehicleType || item.vehicleNo) tv++;
+            const t = item.vehicleType.toLowerCase();
+            if (t === 'car') cars++; else if (t === 'bike') bikes++; else if (t === 'scooty') scooties++; else if (t === 'others') others++;
+        });
+        document.getElementById('statVehicles').innerText = tv;
+        document.getElementById('statPassengers').innerText = tp;
+        document.getElementById('statCars').innerText = cars;
+        document.getElementById('statBikes').innerText = bikes;
+        document.getElementById('statScooties').innerText = scooties;
+        document.getElementById('statOthers').innerText = others;
+        document.getElementById('statMales').innerText = tm;
+        document.getElementById('statFemales').innerText = tf;
+        document.getElementById('statChildren').innerText = tc;
+    }
+
+    function processAndAddEntry() {
+        resizeAndCompressImage(document.getElementById('photo').files[0], function(imgData) {
+            const m = parseInt(document.getElementById('passMales').value) || 0;
+            const f = parseInt(document.getElementById('passFemales').value) || 0;
+            const c = parseInt(document.getElementById('passChildren').value) || 0;
+            entriesData.push({
+                id: Date.now(), date: getTodayDateString(), entryTime: formatTo12Hour(new Date()), exitTime: "Still In",
+                name: document.getElementById('name').value, mobile: document.getElementById('mobile').value,
+                idType: document.getElementById('idType').value, idNumber: document.getElementById('idNumber').value,
+                vehicleType: document.getElementById('vehicleType').value || "", vehicleNo: document.getElementById('vehicleNo').value || "",
+                males: m, females: f, children: c, totalPassengers: (m + f + c),
+                address: document.getElementById('address').value || "N/A", city: document.getElementById('city').value || "N/A",
+                state: document.getElementById('state').value, driverName: document.getElementById('driverName').value || "N/A",
+                driverId: document.getElementById('driverId').value || "N/A", emergencyContact: document.getElementById('emergencyContact').value,
+                remarks: document.getElementById('remarks').value || "N/A", photoData: imgData
+            });
+            renderTableData(); recalculateLiveTickerStats(); document.getElementById('entryForm').reset();
+        });
+    }
+
+    function renderTableData() {
+        const tbody = document.querySelector('#logTable tbody'); tbody.innerHTML = "";
+        entriesData.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.date}</td><td><span class="time-badge">${item.entryTime}</span></td>
+                <td>${item.exitTime === "Still In" ? `<span class="time-badge exit-badge">Still In</span><br><button type="button" class="btn-exit-trigger" onclick="checkoutVisitor(${item.id})">Stamp Exit</button>` : `<span class="time-badge">${item.exitTime}</span>`}</td>
+                <td><strong>${item.name}</strong></td><td>${item.mobile}</td><td><span class="demo-pill">${item.idType}</span> <code>${item.idNumber}</code></td>
+                <td>${item.vehicleType ? `<strong>${item.vehicleType}</strong><br><small>${item.vehicleNo.toUpperCase()}</small>` : 'N/A'}</td>
+                <td>${item.address}, ${item.city}, <br><small><strong>${item.state}</strong></small></td>
+                <td><span class="demo-pill">M: ${item.males}</span><span class="demo-pill">W: ${item.females}</span><span class="demo-pill">C: ${item.children}</span></td>
+                <td style="text-align: center; font-weight: 800;">${item.totalPassengers}</td>
+                <td>${item.driverName !== 'N/A' ? `Name: ${item.driverName}<br><small>ID: ${item.driverId}</small>` : 'N/A'}</td>
+                <td>${item.emergencyContact}</td><td><small>${item.remarks}</small></td>
+                <td>${item.photoData ? `<img src="${item.photoData}" class="img-preview">` : `<span class="no-img-placeholder">No Photo</span>`}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        document.getElementById('count').innerText = entriesData.length;
+    }
+
+    function checkoutVisitor(id) {
+        const idx = entriesData.findIndex(e => e.id === id);
+        if (idx !== -1) { entriesData[idx].exitTime = formatTo12Hour(new Date()); renderTableData(); }
+    }
+
+    function filterTable() {
+        const q = document.getElementById('tableSearch').value.toLowerCase();
+        document.querySelectorAll('#logTable tbody tr').forEach(r => {
+            r.style.display = r.textContent.toLowerCase().includes(q) ? "" : "none";
+        });
+    }
+
+    function exportToExcel() {
+        if (!entriesData.length) { alert("Registry empty."); return; }
+        const worksheet = XLSX.utils.json_to_sheet(entriesData.map((item, idx) => ({
+            "Serial No": idx + 1, "Entry Date": item.date, "Entry Time": item.entryTime, "Exit Time": item.exitTime,
+            "Visitor Name": item.name, "Mobile Number": item.mobile, "ID Type": item.idType, "ID Number": item.idNumber,
+            "Vehicle Type": item.vehicleType || "N/A", "Vehicle Plate": item.vehicleNo || "N/A", "Men": item.males, "Women": item.females,
+            "Children": item.children, "Total Passengers": item.totalPassengers, "Address": item.address, "City": item.city,
+            "State": item.state, "Driver Name": item.driverName, "Driver ID": item.driverId, "Emergency Contact": item.emergencyContact, "Remarks": item.remarks
+        })));
+        const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, worksheet, "Registry");
+        XLSX.writeFile(workbook, `TARA_Registry_${getTodayDateString().replace(/\//g, "-")}.xlsx`);
+    }
+</script>
+</body>
+</html>
