@@ -1,83 +1,123 @@
+// Load historical local data or init empty array
 let logData = JSON.parse(localStorage.getItem('tara_logs')) || [];
 
-// Page Initializations
 window.addEventListener('DOMContentLoaded', () => {
     updateUi();
 });
 
-// Main Form Logic
+// Auto helper to make sure structural inputs don't fall behind numbers
+function calculateTotalSpecs() {
+    const m = parseInt(document.getElementById('countMen').value) || 0;
+    const w = parseInt(document.getElementById('countWomen').value) || 0;
+    const c = parseInt(document.getElementById('countChildren').value) || 0;
+    return m + w + c;
+}
+
+// Form Submission interceptor mapping all fields
 function handleFormSubmit(event) {
     event.preventDefault();
+
+    const menCount = parseInt(document.getElementById('countMen').value) || 0;
+    const womenCount = parseInt(document.getElementById('countWomen').value) || 0;
+    const childrenCount = parseInt(document.getElementById('countChildren').value) || 0;
+    const totalPassengers = menCount + womenCount + childrenCount;
+
+    if (totalPassengers === 0) {
+        alert("⚠️ Please add at least 1 passenger (Man, Woman, or Child) to save the entry.");
+        return;
+    }
 
     const newLog = {
         timestamp: new Date().toLocaleString(),
         vehicleNo: document.getElementById('vehicleNo').value.toUpperCase().trim(),
         vehicleType: document.getElementById('vehicleType').value,
-        passengers: parseInt(document.getElementById('passengerCount').value) || 1
+        originState: document.getElementById('originState').value,
+        men: menCount,
+        women: womenCount,
+        children: childrenCount,
+        totalPax: totalPassengers,
+        idType: document.getElementById('idType').value,
+        idNumber: document.getElementById('idNumber').value.toUpperCase().trim()
     };
 
-    logData.unshift(newLog); // Adds newest items to top of view
+    // Prepend to array to show newest logs at the top
+    logData.unshift(newLog);
     localStorage.setItem('tara_logs', JSON.stringify(logData));
     
+    // Clear Form inputs safely
     document.getElementById('entryForm').reset();
-    document.getElementById('passengerCount').value = 1; // Default reset
+    document.getElementById('countMen').value = 0;
+    document.getElementById('countWomen').value = 0;
+    document.getElementById('countChildren').value = 0;
+    
     updateUi();
 }
 
-// Master Refresh Trigger
 function updateUi() {
     renderRows(logData);
     calculateMetrics();
 }
 
-// Row Renderer
+// Render comprehensive tables
 function renderRows(data) {
     const tbody = document.getElementById('logTableBody');
     tbody.innerHTML = data.map(log => `
         <tr>
             <td>${log.timestamp}</td>
-            <td style="font-weight:bold; letter-spacing:0.5px;">${log.vehicleNo}</td>
+            <td style="font-weight:bold; letter-spacing:0.5px; color:#2b6cb0;">${log.vehicleNo}</td>
             <td>${log.vehicleType}</td>
-            <td>${log.passengers}</td>
+            <td>${log.originState}</td>
+            <td style="font-weight:bold; text-align:center;">${log.totalPax}</td>
+            <td>👨:${log.men} | 👩:${log.women} | 👶:${log.children}</td>
+            <td><small>${log.idType} (${log.idNumber})</small></td>
         </tr>
     `).join('');
 }
 
-// Live Analytical Counters
+// Global Dashboard Metrics Calculator
 function calculateMetrics() {
     const totalEntries = logData.length;
-    const totalPassengers = logData.reduce((sum, current) => sum + current.passengers, 0);
+    const totalPassengers = logData.reduce((sum, item) => sum + (item.totalPax || 0), 0);
 
     document.getElementById('stat-total').innerText = totalEntries;
     document.getElementById('stat-passengers').innerText = totalPassengers;
 }
 
-// Live Query Engine
+// Advanced Multi-Field Live Search Filter
 function liveSearch() {
     const filterText = document.getElementById('searchBar').value.toUpperCase();
-    const matches = logData.filter(log => log.vehicleNo.includes(filterText));
+    const matches = logData.filter(log => 
+        log.vehicleNo.includes(filterText) || 
+        log.originState.toUpperCase().includes(filterText)
+    );
     renderRows(matches);
 }
 
-// Unified Offline Excel Export Generator
+// Robust Multi-Field Excel Processing Sheet
 function exportToExcel() {
     if(logData.length === 0) {
         alert("There are no registered entries to export yet!");
         return;
     }
     
+    // Re-mapping clean headers for administrative audits
     const formattedData = logData.map(item => ({
-        "Time Stamp": item.timestamp,
+        "Date & Time": item.timestamp,
         "Vehicle Number": item.vehicleNo,
-        "Vehicle Classification": item.vehicleType,
-        "Head Count (Passengers)": item.passengers
+        "Vehicle Category": item.vehicleType,
+        "State of Origin": item.originState,
+        "Total Passengers": item.totalPax,
+        "Men Counter": item.men,
+        "Women Counter": item.women,
+        "Children Counter": item.children,
+        "Verification Type ID": item.idType,
+        "ID Number Ref": item.idNumber
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Daily Master Registry");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "TARA Master Registry");
 
-    // File Trigger Name using current Date
     const dateStamp = new Date().toISOString().split('T')[0];
-    XLSX.writeFile(workbook, `TARA_Master_Registry_${dateStamp}.xlsx`);
+    XLSX.writeFile(workbook, `TARA_Full_Registry_${dateStamp}.xlsx`);
 }

@@ -7,6 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a365d">
     
+    <!-- SheetJS Library for Excel Export (Works Offline) -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <style>
@@ -16,12 +17,13 @@
             --bg: #f7fafc;
             --text: #2d3748;
             --white: #ffffff;
+            --border: #cbd5e0;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             background-color: var(--bg);
             color: var(--text);
             font-size: 16px;
@@ -32,39 +34,61 @@
             color: var(--white);
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        h1 { margin: 0; font-size: 1.5rem; }
-        h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; }
+        h1 { margin: 0; font-size: 1.4rem; }
+        h2 { font-size: 1.15rem; color: var(--primary); margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #edf2f7; padding-bottom: 5px; }
 
         .card {
             background: var(--white);
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
             margin-bottom: 15px;
         }
 
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .demographics-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
         label {
-            display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         input, select, button {
             width: 100%;
-            min-height: 48px;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
+            min-height: 44px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
             border-radius: 6px;
             box-sizing: border-box;
-            font-size: 16px; /* Prevents auto-zoom on iOS */
+            font-size: 16px; /* Essential to stop iOS Safari zoom-on-focus */
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
 
         button {
@@ -73,56 +97,60 @@
             border: none;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            margin-top: 5px;
         }
 
         button:active { background-color: var(--primary); }
-        
         .btn-excel { background-color: #2f855a; margin-top: 10px; }
         .btn-excel:active { background-color: #22543d; }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-bottom: 15px;
         }
 
         .stat-box {
             background: var(--bg);
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
         }
 
-        .stat-box div:first-child { font-size: 0.85rem; color: #718096; }
-        .stat-box div:last-child { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
+        .stat-box div:first-child { font-size: 0.8rem; color: #718096; }
+        .stat-box div:last-child { font-size: 1.25rem; font-weight: bold; color: var(--primary); }
 
         .table-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
+            margin-top: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 500px;
+            font-size: 0.85rem;
+            min-width: 800px; /* Ensures data columns remain legible via sideways swipe */
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             border-bottom: 1px solid #e2e8f0;
         }
 
-        th { background-color: #edf2f7; font-weight: 600; }
+        th { background-color: #edf2f7; font-weight: 600; color: #4a5568; }
+        tr:nth-child(even) { background-color: #fbfbfb; }
 
-        /* Responsive Overrides */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
+        /* Desktop optimizations if viewed on laptop */
+        @media (min-width: 768px) {
+            .form-grid { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+            body { padding: 30px; max-width: 900px; margin: 0 auto; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -130,75 +158,137 @@
 
     <header>
         <h1>TARA Entry Monitor</h1>
-        <small>Offline Vehicle & Visitor Logger</small>
+        <small>Tourist Access Registration Application</small>
     </header>
 
+    <!-- Unified Analytics Dashboard -->
     <div class="card">
-        <h2>Live Today</h2>
+        <h2>Live Headcount (Today)</h2>
         <div class="stats-grid">
             <div class="stat-box">
-                <div>Total Entries</div>
+                <div>Vehicles Logged</div>
                 <div id="stat-total">0</div>
             </div>
             <div class="stat-box">
-                <div>Total Visitors</div>
+                <div>Total Tourists</div>
                 <div id="stat-passengers">0</div>
             </div>
         </div>
-        <button class="btn-excel" onclick="exportToExcel()">Export Data to Excel</button>
+        <button class="btn-excel" onclick="exportToExcel()">📊 Export Master Excel Sheet</button>
     </div>
 
+    <!-- Complete Feature Data Entry Form -->
     <div class="card">
-        <h2>New Vehicle Log</h2>
+        <h2>New Vehicle & Visitor Registration</h2>
         <form id="entryForm" onsubmit="handleFormSubmit(event)">
-            <div class="form-group">
-                <label for="vehicleNo">Vehicle Number</label>
-                <input type="text" id="vehicleNo" placeholder="e.g., AR-01-A-1234" required style="text-transform: uppercase;">
+            <div class="form-grid">
+                
+                <div class="form-group">
+                    <label for="vehicleNo">Vehicle Registration Number</label>
+                    <input type="text" id="vehicleNo" placeholder="e.g., AR-01-A-1234" required style="text-transform: uppercase;">
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleType">Vehicle Type</label>
+                    <select id="vehicleType" required>
+                        <option value="Light Motor Vehicle (LMV)">Light Motor Vehicle (LMV)</option>
+                        <option value="Heavy Motor Vehicle (HMV)">Heavy Motor Vehicle (HMV)</option>
+                        <option value="Two Wheeler">Two Wheeler</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="originState">State / UT of Origin</label>
+                    <select id="originState" required>
+                        <option value="" disabled selected>Select State</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Other State">Other State</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Demographics (Passenger Split)</label>
+                    <div class="demographics-group">
+                        <div class="form-group">
+                            <label for="countMen" style="font-size:0.75rem; text-align:center;">Men</label>
+                            <input type="number" id="countMen" min="0" value="0" required onchange="calculateTotalSpecs()">
+                        </div>
+                        <div class="form-group">
+                            <label for="countWomen" style="font-size:0.75rem; text-align:center;">Women</label>
+                            <input type="number" id="countWomen" min="0" value="0" required onchange="calculateTotalSpecs()">
+                        </div>
+                        <div class="form-group">
+                            <label for="countChildren" style="font-size:0.75rem; text-align:center;">Children</label>
+                            <input type="number" id="countChildren" min="0" value="0" required onchange="calculateTotalSpecs()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="idType">Leader ID Verification Type</label>
+                    <select id="idType" required>
+                        <option value="Aadhaar Card">Aadhaar Card</option>
+                        <option value="Driving License">Driving License</option>
+                        <option value="Voter ID">Voter ID Card</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Government ID">Other Valid Gov ID</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber">ID Number (Last 4 Digits or Full)</label>
+                    <input type="text" id="idNumber" placeholder="e.g., 4321" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <button type="submit">🔒 Securely Save Log Entry</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="vehicleType">Vehicle Type</label>
-                <select id="vehicleType" required>
-                    <option value="Light Motor Vehicle (LMV)">Light Motor Vehicle (LMV)</option>
-                    <option value="Heavy Motor Vehicle (HMV)">Heavy Motor Vehicle (HMV)</option>
-                    <option value="Two Wheeler">Two Wheeler</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="passengerCount">Number of Passangers</label>
-                <input type="number" id="passengerCount" min="1" value="1" required>
-            </div>
-            <button type="submit">Save Log Entry</button>
         </form>
     </div>
 
+    <!-- Live Search & Data Logs -->
     <div class="card">
-        <h2>Master Registry Records</h2>
+        <h2>Master Registry</h2>
         <div class="form-group">
-            <input type="text" id="searchBar" oninput="liveSearch()" placeholder="🔍 Live search by vehicle number...">
+            <input type="text" id="searchBar" oninput="liveSearch()" placeholder="🔍 Live search by vehicle or origin state...">
         </div>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Time Stamp</th>
+                        <th>Timestamp</th>
                         <th>Vehicle No.</th>
                         <th>Type</th>
-                        <th>Passengers</th>
+                        <th>Origin</th>
+                        <th>Total Pax</th>
+                        <th>M / W / C</th>
+                        <th>Verification ID</th>
                     </tr>
                 </thead>
                 <tbody id="logTableBody">
-                    </tbody>
+                    <!-- Dynamic Data Rows -->
+                </tbody>
             </table>
         </div>
     </div>
 
     <script src="app.js"></script>
-
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('TARA Mobile Service Worker Online!'))
+                    .then(reg => console.log('TARA Mobile PWA Engine Operational!'))
                     .catch(err => console.error('PWA Setup Error:', err));
             });
         }
