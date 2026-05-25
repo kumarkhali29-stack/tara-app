@@ -2,57 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TARA - Mobile Entry Monitor</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a365d">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TARA - Tourist Access Registration Application</title>
     
-    <!-- SheetJS Library for Excel Export (Works Offline) -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         :root {
-            --primary: #1a365d;
-            --accent: #2b6cb0;
-            --bg: #f7fafc;
-            --text: #2d3748;
-            --white: #ffffff;
-            --border: #cbd5e0;
+            --bg-main: #f4f7fa;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #3730a3;
+            --success: #10b981;
+            --success-hover: #059669;
+            --action: #f59e0b;
+            --action-hover: #d97706;
+            --border: #e2e8f0;
+            --border-focus: #6366f1;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --required-color: #ef4444;
+            
+            /* 1940s Military Typography Accent */
+            --font-military: 'Courier New', Courier, monospace;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
             margin: 0;
             padding: 15px;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 16px;
+            color: var(--text-primary);
+            line-height: 1.5;
+            box-sizing: border-box;
         }
 
-        header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .container {
+            max-width: 1350px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        /* WARTIME TYPOGRAPHY HEADER */
+        .header-document-section {
             text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
         }
 
-        h1 { margin: 0; font-size: 1.4rem; }
-        h2 { font-size: 1.15rem; color: var(--primary); margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #edf2f7; padding-bottom: 5px; }
-
-        .card {
-            background: var(--white);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
+        .header-document-section .classification-mark {
+            display: inline-block;
+            font-family: var(--font-military);
+            border: 2px solid #000;
+            padding: 3px 14px;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            background: #fff;
+            color: #000;
         }
 
+        .header-document-section h2 {
+            font-family: var(--font-military);
+            font-size: 22px;
+            font-weight: 900;
+            color: #000;
+            margin: 0 0 8px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header-document-section p {
+            font-family: var(--font-military);
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* CLEAN DATA ENTRY FORMS & GRID */
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-group.span-2 { grid-column: span 2; }
+        }
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.span-2 { grid-column: 1 / -1; }
+            body { padding: 8px; }
+            .container { padding: 15px; }
         }
 
         .form-group {
@@ -60,238 +120,635 @@
             flex-direction: column;
         }
 
-        .demographics-group {
+        .form-group.span-2 {
+            grid-column: span 2;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .demographic-wrapper {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            background: #edf2f7;
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        label {
-            margin-bottom: 4px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        input, select, button {
-            width: 100%;
-            min-height: 44px;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px; /* Essential to stop iOS Safari zoom-on-focus */
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
-        }
-
-        button {
-            background-color: var(--accent);
-            color: var(--white);
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-        button:active { background-color: var(--primary); }
-        .btn-excel { background-color: #2f855a; margin-top: 10px; }
-        .btn-excel:active { background-color: #22543d; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
-        .stat-box {
-            background: var(--bg);
-            padding: 10px;
-            text-align: center;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+        label {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
         }
 
-        .stat-box div:first-child { font-size: 0.8rem; color: #718096; }
-        .stat-box div:last-child { font-size: 1.25rem; font-weight: bold; color: var(--primary); }
+        label .optional {
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: none;
+            margin-left: 4px;
+        }
+
+        label .required-star {
+            color: var(--required-color);
+            margin-left: 4px;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            color: var(--text-primary);
+            background-color: #fff;
+            box-sizing: border-box;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #cbd5e1;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--border-focus);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        input:required, select:required {
+            border-left: 4px solid var(--required-color);
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* BUTTONS */
+        .btn-container {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .btn-container { flex-direction: row; }
+        }
+
+        button {
+            font-family: inherit;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+            min-height: 48px;
+        }
+
+        .btn-form {
+            flex: 1;
+            width: 100%;
+        }
+
+        .btn-add { 
+            background-color: var(--success); 
+            color: white; 
+        }
+        .btn-add:hover { 
+            background-color: var(--success-hover); 
+            transform: translateY(-1px);
+        }
+
+        .btn-export { 
+            background-color: var(--primary); 
+            color: white; 
+        }
+        .btn-export:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-1px);
+        }
+        
+        .btn-exit-trigger {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .btn-exit-trigger:hover {
+            background-color: #b91c1c;
+            color: white;
+        }
+
+        .search-container {
+            margin-top: 35px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid #c7d2fe;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 14px 14px 14px 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            background-color: #fff;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            fill: #64748b;
+            pointer-events: none;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* LIVE ANALYTICS TICKER */
+        .stats-ticker-container {
+            margin-top: 35px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .ticker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .ticker-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .ticker-date-badge {
+            font-size: 12px;
+            font-weight: 700;
+            background-color: #f1f5f9;
+            color: var(--primary);
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .ticker-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .ticker-subgrid-demographics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .ticker-grid { grid-template-columns: repeat(3, 1fr); }
+            .ticker-subgrid-demographics { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .ticker-grid { grid-template-columns: repeat(2, 1fr); }
+            .ticker-subgrid-demographics { grid-template-columns: 1fr; }
+        }
+
+        .ticker-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ticker-card .value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .ticker-card .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+        
+        .table-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        .table-header-flex h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .counter-badge {
+            background: #3b82f6;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
 
         .table-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            margin-top: 10px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 13px;
             text-align: left;
-            font-size: 0.85rem;
-            min-width: 800px; /* Ensures data columns remain legible via sideways swipe */
+            min-width: 1100px;
         }
 
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
+        th { 
+            background-color: #f1f5f9; 
+            color: var(--text-primary); 
+            font-weight: 700;
+            padding: 12px 14px;
+            border-bottom: 2px solid var(--border);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
         }
 
-        th { background-color: #edf2f7; font-weight: 600; color: #4a5568; }
-        tr:nth-child(even) { background-color: #fbfbfb; }
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            background-color: #fff;
+            vertical-align: top;
+        }
 
-        /* Desktop optimizations if viewed on laptop */
-        @media (min-width: 768px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); }
-            .full-width { grid-column: span 2; }
-            body { padding: 30px; max-width: 900px; margin: 0 auto; }
-            h1 { font-size: 1.8rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f8fafc; }
+
+        .img-preview {
+            width: 55px;
+            height: 55px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .no-img-placeholder {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .time-badge {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 11px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .exit-badge {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .demo-pill {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            background: #f1f5f9;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .footer-watermark {
+            text-align: center;
+            font-family: var(--font-military);
+            font-size: 12px;
+            font-weight: bold;
+            color: #94a3b8;
+            margin-top: 50px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            user-select: none;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>TARA Entry Monitor</h1>
-        <small>Tourist Access Registration Application</small>
-    </header>
-
-    <!-- Unified Analytics Dashboard -->
-    <div class="card">
-        <h2>Live Headcount (Today)</h2>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div>Vehicles Logged</div>
-                <div id="stat-total">0</div>
+<div class="container">
+    <div class="header-document-section">
+        <div class="classification-mark">RESTRICTED SECURITY LOG</div>
+        <h2>TARA : Tourist Access Registration Application</h2>
+        <p>Gongkar La Tourist Database Management System by 2/9 GR, Chuna</p>
+    </div>
+    
+    <form id="entryForm" onsubmit="event.preventDefault(); processAndAddEntry();">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="name">Visitor Name <span class="required-star">*</span></label>
+                <input type="text" id="name" placeholder="John Doe" required>
             </div>
-            <div class="stat-box">
-                <div>Total Tourists</div>
-                <div id="stat-passengers">0</div>
+            <div class="form-group">
+                <label for="mobile">Mobile Number <span class="required-star">*</span></label>
+                <input type="text" id="mobile" placeholder="10-digit number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+            </div>
+            <div class="form-group">
+                <label for="idType">ID Proof Type <span class="required-star">*</span></label>
+                <select id="idType" required>
+                    <option value="" disabled selected hidden>Select ID Type...</option>
+                    <option value="Aadhaar">Aadhaar</option>
+                    <option value="Passport">Passport</option>
+                    <option value="DL">DL (Driver's License)</option>
+                    <option value="Voter Card">Voter Card</option>
+                    <option value="Misc">Misc.</option>
+                </select>
+            </div>
+            <div class="form-group span-2">
+                <label for="idNumber">ID Document Number <span class="required-star">*</span></label>
+                <input type="text" id="idNumber" placeholder="Enter document identification code/number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="vehicleType">Type of Vehicle <span class="optional">(Optional)</span></label>
+                <select id="vehicleType">
+                    <option value="" selected>Select vehicle type...</option>
+                    <option value="Car">Car</option>
+                    <option value="Bike">Bike</option>
+                    <option value="Scooty">Scooty</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="vehicleNo">Vehicle Number <span class="optional">(Optional)</span></label>
+                <input type="text" id="vehicleNo" placeholder="e.g. DL 1CA 1234" style="text-transform: uppercase;">
+            </div>
+
+            <div class="form-group">
+                <label>Passenger Demographic Split <span class="optional">(Optional)</span></label>
+                <div class="demographic-wrapper">
+                    <input type="number" id="passMales" min="0" placeholder="Men">
+                    <input type="number" id="passFemales" min="0" placeholder="Women">
+                    <input type="number" id="passChildren" min="0" placeholder="Kids">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="address">Full Address <span class="optional">(Optional)</span></label>
+                <input type="text" id="address" placeholder="House/Office details, Street, Area">
+            </div>
+            <div class="form-group">
+                <label for="city">City <span class="optional">(Optional)</span></label>
+                <input type="text" id="city" placeholder="City">
+            </div>
+            <div class="form-group">
+                <label for="state">State / Union Territory <span class="required-star">*</span></label>
+                <select id="state" required>
+                    <option value="" disabled selected hidden>Choose a state...</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands (UT)</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chandigarh">Chandigarh (UT)</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu (UT)</option>
+                    <option value="Delhi">Delhi (NCT)</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jammu and Kashmir">Jammu and Kashmir (UT)</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Ladakh">Ladakh (UT)</option>
+                    <option value="Lakshadweep">Lakshadweep (UT)</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Puducherry">Puducherry (UT)</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="driverName">Driver Name <span class="optional">(Optional)</span></label>
+                <input type="text" id="driverName" placeholder="Driver Full Name">
+            </div>
+            <div class="form-group">
+                <label for="driverId">Driver ID Proof <span class="optional">(Optional)</span></label>
+                <input type="text" id="driverId" placeholder="Driver ID/License Number">
+            </div>
+            <div class="form-group">
+                <label for="emergencyContact">Emergency Contact <span class="required-star">*</span></label>
+                <input type="text" id="emergencyContact" placeholder="Emergency Phone Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="remarks">Remarks / Purpose of Visit <span class="optional">(Optional)</span></label>
+                <input type="text" id="remarks" placeholder="Enter any specific remarks or meeting purpose here...">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="photo">Snapshot/Identification Photo <span class="optional">(Optional)</span></label>
+                <input type="file" id="photo" accept="image/*">
             </div>
         </div>
-        <button class="btn-excel" onclick="exportToExcel()">📊 Export Master Excel Sheet</button>
-    </div>
-
-    <!-- Complete Feature Data Entry Form -->
-    <div class="card">
-        <h2>New Vehicle & Visitor Registration</h2>
-        <form id="entryForm" onsubmit="handleFormSubmit(event)">
-            <div class="form-grid">
-                
-                <div class="form-group">
-                    <label for="vehicleNo">Vehicle Registration Number</label>
-                    <input type="text" id="vehicleNo" placeholder="e.g., AR-01-A-1234" required style="text-transform: uppercase;">
-                </div>
-
-                <div class="form-group">
-                    <label for="vehicleType">Vehicle Type</label>
-                    <select id="vehicleType" required>
-                        <option value="Light Motor Vehicle (LMV)">Light Motor Vehicle (LMV)</option>
-                        <option value="Heavy Motor Vehicle (HMV)">Heavy Motor Vehicle (HMV)</option>
-                        <option value="Two Wheeler">Two Wheeler</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="originState">State / UT of Origin</label>
-                    <select id="originState" required>
-                        <option value="" disabled selected>Select State</option>
-                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                        <option value="Assam">Assam</option>
-                        <option value="Meghalaya">Meghalaya</option>
-                        <option value="Manipur">Manipur</option>
-                        <option value="Mizoram">Mizoram</option>
-                        <option value="Nagaland">Nagaland</option>
-                        <option value="Tripura">Tripura</option>
-                        <option value="Sikkim">Sikkim</option>
-                        <option value="West Bengal">West Bengal</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Other State">Other State</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Demographics (Passenger Split)</label>
-                    <div class="demographics-group">
-                        <div class="form-group">
-                            <label for="countMen" style="font-size:0.75rem; text-align:center;">Men</label>
-                            <input type="number" id="countMen" min="0" value="0" required onchange="calculateTotalSpecs()">
-                        </div>
-                        <div class="form-group">
-                            <label for="countWomen" style="font-size:0.75rem; text-align:center;">Women</label>
-                            <input type="number" id="countWomen" min="0" value="0" required onchange="calculateTotalSpecs()">
-                        </div>
-                        <div class="form-group">
-                            <label for="countChildren" style="font-size:0.75rem; text-align:center;">Children</label>
-                            <input type="number" id="countChildren" min="0" value="0" required onchange="calculateTotalSpecs()">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="idType">Leader ID Verification Type</label>
-                    <select id="idType" required>
-                        <option value="Aadhaar Card">Aadhaar Card</option>
-                        <option value="Driving License">Driving License</option>
-                        <option value="Voter ID">Voter ID Card</option>
-                        <option value="Passport">Passport</option>
-                        <option value="Government ID">Other Valid Gov ID</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="idNumber">ID Number (Last 4 Digits or Full)</label>
-                    <input type="text" id="idNumber" placeholder="e.g., 4321" required>
-                </div>
-
-                <div class="form-group full-width">
-                    <button type="submit">🔒 Securely Save Log Entry</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <!-- Live Search & Data Logs -->
-    <div class="card">
-        <h2>Master Registry</h2>
-        <div class="form-group">
-            <input type="text" id="searchBar" oninput="liveSearch()" placeholder="🔍 Live search by vehicle or origin state...">
+        
+        <div class="btn-container">
+            <button type="submit" class="btn-form btn-add">
+                Secure Check-In / Add Entry
+            </button>
+            <button type="button" class="btn-form btn-export" onclick="exportToExcel()">
+                Export Master Sheet (.xlsx)
+            </button>
         </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Vehicle No.</th>
-                        <th>Type</th>
-                        <th>Origin</th>
-                        <th>Total Pax</th>
-                        <th>M / W / C</th>
-                        <th>Verification ID</th>
-                    </tr>
-                </thead>
-                <tbody id="logTableBody">
-                    <!-- Dynamic Data Rows -->
+    </form>
+
+    <div class="stats-ticker-container">
+        <div class="ticker-header">
+            <span class="ticker-title">Live Analytics Data Counter</span>
+            <span class="ticker-date-badge" id="tickerLiveDate">DD/MM/YYYY</span>
+        </div>
+        <div class="ticker-grid">
+            <div class="ticker-card" style="border-top: 3px solid #6366f1;">
+                <span class="value" id="statVehicles">0</span>
+                <span class="label">Total Vehicles</span>
+            </div>
+            <div class="ticker-card" style="border-top: 3px solid #10b981;">
+                <span class="value" id="statPassengers">0</span>
+                <span class="label">Total Passengers</span>
+            </div>
+            <div class="ticker-card">
+                <span class="value" id="statCars">0</span>
+                <span class="label">Cars</span>
+            </div>
+            <div class="ticker-card">
+                <span class="value" id="statBikes">0</span>
+                <span class="label">Bikes</span>
+            </div>
+            <div class="ticker-card">
+                <span class="value" id="statScooties">0</span>
+                <span class="label">Scooties</span>
+            </div>
+            <div class="ticker-card">
+                <span class="value" id="statOthers">0</span>
+                <span class="label">Others</span>
+            </div>
+        </div>
+        
+        <div class="ticker-subgrid-demographics">
+            <div class="ticker-card" style="border-top: 3px solid #3b82f6;">
+                <span class="value" id="statMales">0</span>
+                <span class="label">Total Men (Males)</span>
+            </div>
+            <div class="ticker-card" style="border-top: 3px solid #ec4899;">
+                <span class="value" id="statFemales">0</span>
+                <span class="label">Total Women (Females)</span>
+            </div>
+            <div class="ticker-card" style="border-top: 3px solid #f59e0b;">
+                <span class="value" id="statChildren">0</span>
+                <span class="label">Total Children</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <label for="tableSearch">Instant Filter Terminal</label>
+        <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+            <input type="text" id="tableSearch" class="search-input" placeholder="Type vehicle number or state profile to instantly isolate rows..." onkeyup="filterTable()">
+        </div>
+    </div>
+
+    <div class="table-header-flex">
+        <h3>Active Registry Log</h3>
+        <span class="counter-badge"><span id="count">0</span> Records Stored</span>
+    </div>
+
+    <div class="table-container">
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>Entry Date</th>
+                    <th>Entry Time</th>
+                    <th>Exit Time</th>
+                    <th>Visitor Name</th>
+                    <th>Mobile</th>
+                    <th>ID Info</th>
+                    <th>Vehicle Details</th>
+                    <th>Address Details</th>
+                    <th>Demographics Split</th>
+                    <th>Total Passengers</th>
+                    <th>Driver Info</th>
+                    <th>Emergency No.</th>
+                    <th>Remarks</th>
+                    <th>Snapshot</th>
+                </tr>
+            </thead>
+            <tbody>
                 </tbody>
-            </table>
-        </div>
+        </table>
     </div>
 
-    <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('TARA Mobile PWA Engine Operational!'))
-                    .catch(err => console.error('PWA Setup Error:', err));
-            });
-        }
-    </script>
-</body>
-</html>
+    <div class="footer-watermark">
+        Application Architecture via Vikas Kumar & Gemini
+    </div>
+</div>
+
+<script>
+    let entriesData = [];
+
+    window.onload = function() {
+        if (typeof XLSX === 'undefined') {
+            alert("Configuration Notice: Excel Engine framework offline. Connect to
