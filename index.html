@@ -2,206 +2,304 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TARA - Mobile Entry Monitor</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a365d">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TARA - Tourist Access Registration Application</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         :root {
-            --primary: #1a365d;
-            --accent: #2b6cb0;
-            --bg: #f7fafc;
-            --text: #2d3748;
-            --white: #ffffff;
+            --bg-main: #f4f7fa;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #3730a3;
+            --success: #10b981;
+            --success-hover: #059669;
+            --action: #f59e0b;
+            --action-hover: #d97706;
+            --border: #e2e8f0;
+            --border-focus: #6366f1;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --required-color: #ef4444;
+            
+            /* 1940s Military Typography Accent */
+            --font-military: 'Courier New', Courier, monospace;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
             margin: 0;
-            padding: 20px;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 16px;
+            padding: 15px; /* Compact padding for mobile viewports */
+            color: var(--text-primary);
+            line-height: 1.5;
+            box-sizing: border-box;
         }
 
-        header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .container {
+            max-width: 1350px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 20px; /* Scaled down from 40px for mobile tapping comfort */
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        /* WARTIME TYPOGRAPHY HEADER ONLY */
+        .header-document-section {
             text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
         }
 
-        h1 { margin: 0; font-size: 1.5rem; }
-        h2 { font-size: 1.2rem; color: var(--primary); margin-top: 0; }
+        .header-document-section .classification-mark {
+            display: inline-block;
+            font-family: var(--font-military);
+            border: 2px solid #000;
+            padding: 3px 14px;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            background: #fff;
+            color: #000;
+        }
 
-        .card {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+        .header-document-section h2 {
+            font-family: var(--font-military);
+            font-size: 22px; /* Balanced for mobile wrapping layout */
+            font-weight: 900;
+            color: #000;
+            margin: 0 0 8px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header-document-section p {
+            font-family: var(--font-military);
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* CLEAN DATA ENTRY FORMS & GRID */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        /* Responsive Breakpoints to transition beautifully to handheld terminals */
+        @media (max-width: 900px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-group.span-2 { grid-column: span 2; }
+        }
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.span-2 { grid-column: 1 / -1; }
+            body { padding: 8px; }
+            .container { padding: 15px; }
         }
 
         .form-group {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.span-2 {
+            grid-column: span 2;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .demographic-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
         }
 
-        input, select, button {
-            width: 100%;
-            min-height: 48px;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
+        label .optional {
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: none;
+            margin-left: 4px;
+        }
+
+        label .required-star {
+            color: var(--required-color);
+            margin-left: 4px;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 16px; /* Essential set at 16px to prevent iOS Safari auto-zoom issues on focus */
+            color: var(--text-primary);
+            background-color: #fff;
             box-sizing: border-box;
-            font-size: 16px; /* Prevents auto-zoom on iOS */
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #cbd5e1;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--border-focus);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        input:required, select:required {
+            border-left: 4px solid var(--required-color);
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* EYE-PLEASING COLORFUL INTERFACE ELEMENTS */
+        .btn-container {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column; /* Stack vertically on small mobile by default */
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .btn-container { flex-direction: row; }
         }
 
         button {
-            background-color: var(--accent);
-            color: var(--white);
+            font-family: inherit;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 700;
             border: none;
-            font-weight: bold;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+            min-height: 48px; /* Touch target enhancement */
         }
 
-        button:active { background-color: var(--primary); }
-        
-        .btn-excel { background-color: #2f855a; margin-top: 10px; }
-        .btn-excel:active { background-color: #22543d; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stat-box {
-            background: var(--bg);
-            padding: 12px;
-            text-align: center;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .stat-box div:first-child { font-size: 0.85rem; color: #718096; }
-        .stat-box div:last-child { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
-
-        .table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-        }
-
-        table {
+        .btn-form {
+            flex: 1;
             width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 500px;
         }
 
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
+        .btn-add { 
+            background-color: var(--success); 
+            color: white; 
+        }
+        .btn-add:hover { 
+            background-color: var(--success-hover); 
+            transform: translateY(-1px);
         }
 
-        th { background-color: #edf2f7; font-weight: 600; }
-
-        /* Responsive Overrides */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
+        .btn-export { 
+            background-color: var(--primary); 
+            color: white; 
         }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>TARA Entry Monitor</h1>
-        <small>Offline Vehicle & Visitor Logger</small>
-    </header>
-
-    <div class="card">
-        <h2>Live Today</h2>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div>Total Entries</div>
-                <div id="stat-total">0</div>
-            </div>
-            <div class="stat-box">
-                <div>Total Visitors</div>
-                <div id="stat-passengers">0</div>
-            </div>
-        </div>
-        <button class="btn-excel" onclick="exportToExcel()">Export Data to Excel</button>
-    </div>
-
-    <div class="card">
-        <h2>New Vehicle Log</h2>
-        <form id="entryForm" onsubmit="handleFormSubmit(event)">
-            <div class="form-group">
-                <label for="vehicleNo">Vehicle Number</label>
-                <input type="text" id="vehicleNo" placeholder="e.g., AR-01-A-1234" required style="text-transform: uppercase;">
-            </div>
-            <div class="form-group">
-                <label for="vehicleType">Vehicle Type</label>
-                <select id="vehicleType" required>
-                    <option value="Light Motor Vehicle (LMV)">Light Motor Vehicle (LMV)</option>
-                    <option value="Heavy Motor Vehicle (HMV)">Heavy Motor Vehicle (HMV)</option>
-                    <option value="Two Wheeler">Two Wheeler</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="passengerCount">Number of Passangers</label>
-                <input type="number" id="passengerCount" min="1" value="1" required>
-            </div>
-            <button type="submit">Save Log Entry</button>
-        </form>
-    </div>
-
-    <div class="card">
-        <h2>Master Registry Records</h2>
-        <div class="form-group">
-            <input type="text" id="searchBar" oninput="liveSearch()" placeholder="🔍 Live search by vehicle number...">
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time Stamp</th>
-                        <th>Vehicle No.</th>
-                        <th>Type</th>
-                        <th>Passengers</th>
-                    </tr>
-                </thead>
-                <tbody id="logTableBody">
-                    </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('TARA Mobile Service Worker Online!'))
-                    .catch(err => console.error('PWA Setup Error:', err));
-            });
+        .btn-export:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-1px);
         }
-    </script>
-</body>
-</html>
+        
+        .btn-exit-trigger {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .btn-exit-trigger:hover {
+            background-color: #b91c1c;
+            color: white;
+        }
+
+        .search-container {
+            margin-top: 35px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid #c7d2fe;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 14px 14px 14px 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            background-color: #fff;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            fill: #64748b;
+            pointer-events: none;
+            width: 18px;
+            height:
