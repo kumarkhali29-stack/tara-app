@@ -1,0 +1,83 @@
+let logData = JSON.parse(localStorage.getItem('tara_logs')) || [];
+
+// Page Initializations
+window.addEventListener('DOMContentLoaded', () => {
+    updateUi();
+});
+
+// Main Form Logic
+function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const newLog = {
+        timestamp: new Date().toLocaleString(),
+        vehicleNo: document.getElementById('vehicleNo').value.toUpperCase().trim(),
+        vehicleType: document.getElementById('vehicleType').value,
+        passengers: parseInt(document.getElementById('passengerCount').value) || 1
+    };
+
+    logData.unshift(newLog); // Adds newest items to top of view
+    localStorage.setItem('tara_logs', JSON.stringify(logData));
+    
+    document.getElementById('entryForm').reset();
+    document.getElementById('passengerCount').value = 1; // Default reset
+    updateUi();
+}
+
+// Master Refresh Trigger
+function updateUi() {
+    renderRows(logData);
+    calculateMetrics();
+}
+
+// Row Renderer
+function renderRows(data) {
+    const tbody = document.getElementById('logTableBody');
+    tbody.innerHTML = data.map(log => `
+        <tr>
+            <td>${log.timestamp}</td>
+            <td style="font-weight:bold; letter-spacing:0.5px;">${log.vehicleNo}</td>
+            <td>${log.vehicleType}</td>
+            <td>${log.passengers}</td>
+        </tr>
+    `).join('');
+}
+
+// Live Analytical Counters
+function calculateMetrics() {
+    const totalEntries = logData.length;
+    const totalPassengers = logData.reduce((sum, current) => sum + current.passengers, 0);
+
+    document.getElementById('stat-total').innerText = totalEntries;
+    document.getElementById('stat-passengers').innerText = totalPassengers;
+}
+
+// Live Query Engine
+function liveSearch() {
+    const filterText = document.getElementById('searchBar').value.toUpperCase();
+    const matches = logData.filter(log => log.vehicleNo.includes(filterText));
+    renderRows(matches);
+}
+
+// Unified Offline Excel Export Generator
+function exportToExcel() {
+    if(logData.length === 0) {
+        alert("There are no registered entries to export yet!");
+        return;
+    }
+    
+    const formattedData = logData.map(item => ({
+        "Time Stamp": item.timestamp,
+        "Vehicle Number": item.vehicleNo,
+        "Vehicle Classification": item.vehicleType,
+        "Head Count (Passengers)": item.passengers
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Daily Master Registry");
+
+    // File Trigger Name using current Date
+    const dateStamp = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `TARA_Master_Registry_${dateStamp}.xlsx`);
+}
